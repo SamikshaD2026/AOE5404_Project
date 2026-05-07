@@ -94,6 +94,7 @@ plot(x, y, 'bo--', 'MarkerSize', 4);
 set(gca, 'YDir', 'reverse'); 
 xlabel('X');
 ylabel('Y');
+title('Initial Guess');
 legend('Analytical Solution (Cycloid)', 'Gradient Solution','Location', 'best');
 grid on;
 axis equal;
@@ -346,10 +347,14 @@ axis equal;
 
 % Gradient norm convergence: indicates how close the trajectory is to the optimum
 figure('Color','w');
-semilogy(grad_hist_cont, 'b-', 'LineWidth', 2); hold on;
-semilogy(grad_hist_disc, 'g-', 'LineWidth', 2);
-semilogy(grad_hist_bfgs_cont, 'b--', 'LineWidth', 2);
-semilogy(grad_hist_bfgs_disc, 'g--', 'LineWidth', 2);
+it_cont = 1:length(grad_hist_cont);
+it_disc = 1:length(grad_hist_disc);
+it_bfgs_cont = 1:length(grad_hist_bfgs_cont);
+it_bfgs_disc = 1:length(grad_hist_bfgs_disc);
+loglog(it_cont, grad_hist_cont, 'b-', 'LineWidth', 2); hold on;
+loglog(it_disc, grad_hist_disc, 'g-', 'LineWidth', 2);
+loglog(it_bfgs_cont, grad_hist_bfgs_cont, 'b--', 'LineWidth', 2);
+loglog(it_bfgs_disc, grad_hist_bfgs_disc, 'g--', 'LineWidth', 2);
 xlabel('Iteration');
 ylabel('L2 Norm of Gradient');
 title('Gradient Convergence History');
@@ -358,10 +363,14 @@ grid on;
 
 % Cost function convergence: shows reduction in total travel time over iterations
 figure('Color','w');
-semilogy(cost_hist_cont, 'b-', 'LineWidth', 2); hold on;
-semilogy(cost_hist_disc, 'g-', 'LineWidth', 2);
-semilogy(cost_hist_bfgs_cont, 'b--', 'LineWidth', 2);
-semilogy(cost_hist_bfgs_disc, 'g--', 'LineWidth', 2);
+it_cont = 1:length(cost_hist_cont);
+it_disc = 1:length(cost_hist_disc);
+it_bfgs_cont = 1:length(cost_hist_bfgs_cont);
+it_bfgs_disc = 1:length(cost_hist_bfgs_disc);
+loglog(it_cont, cost_hist_cont, 'b-', 'LineWidth', 2); hold on;
+loglog(it_disc, cost_hist_disc, 'g-', 'LineWidth', 2);
+loglog(it_bfgs_cont, cost_hist_bfgs_cont, 'b--', 'LineWidth', 2);
+loglog(it_bfgs_disc, cost_hist_bfgs_disc, 'g--', 'LineWidth', 2);
 xlabel('Iteration');
 ylabel('Cost Function I');
 title('Cost Function Convergence History');

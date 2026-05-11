@@ -434,3 +434,63 @@ function G_disc = discreteGradient(y, dx)
         G_disc(j) = B(j) - B(j+1) - (dx/2) * (A(j+1) + A(j));
     end
 end
+
+%% Gradient Verification
+% Verify defined continuous and discrete gradients by using a finite
+% difference gradient for comparison
+clc;
+
+eps_fd = 1e-6;             % small perturbation
+G_fd = zeros(N, 1);     % gradient determined using FD initialization
+
+for j = 1:N
+    % Create copies for plus and minus
+    y_plus = y;
+    y_minus = y;
+
+    % Perturb the copies
+    y_plus(j+1) = y_plus(j+1) + eps_fd;
+    y_minus(j+1) = y_minus(j+1) - eps_fd;
+
+    % Get the plus and minus costs
+    I_plus = costFunction(y_plus, dx);
+    I_minus = costFunction(y_minus, dx);
+
+    % Use finite difference to get the gradient
+    G_fd(j) = (I_plus-I_minus)/(2*eps_fd);
+end
+
+% Error between finite difference and analytical gradients
+err_cont = norm(G_cont-G_fd)/norm(G_fd);
+err_disc = norm(G_disc - G_fd)/norm(G_fd);
+fprintf('Relative Error (Continuous Gradient): %.6e\n', err_cont);
+fprintf('Relative Error (Discrete Gradient): %.6e\n', err_disc);
+
+% Plotting the gradient determined by finite difference with the continuous
+% and discrete gradients
+figure('Color','w');
+plot(1:N, G_fd, 'k-', 'LineWidth', 2); hold on;
+plot(1:N, G_cont, 'r--', 'LineWidth', 2); 
+plot(1:N, dx*G_cont, 'm-.', 'LineWidth', 2);
+plot(1:N, G_disc, 'b:', 'LineWidth', 2);
+
+legend('Finite Difference', 'Continuous', 'dx * Continuous', ....
+    'Discrete', 'Location', 'best');
+title('Gradient Verification Comparison');
+xlabel('Design Variable Index');
+ylabel('Gradient Value');
+
+grid on;
+
+figure('Color','w');
+plot(1:N, G_fd, 'k-', 'LineWidth', 2); hold on;
+plot(1:N, dx*G_cont, 'm-.', 'LineWidth', 2);
+plot(1:N, G_disc, 'b:', 'LineWidth', 2);
+
+legend('Finite Difference', 'dx * Continuous', ....
+    'Discrete', 'Location', 'best');
+title('Gradient Verification Comparison w/o Continuous');
+xlabel('Design Variable Index');
+ylabel('Gradient Value');
+
+grid on;
